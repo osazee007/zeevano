@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEEVANO — Descended from Greatness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600;700;900&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--deep:#080604;--earth:#1a1208;--gold:#c8921a;--gold2:#e8c060;--cream:#f0e4c8;--em:#0e3028;--em2:#1a5040;--red:#7a1418;}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--deep);color:var(--cream);overflow-x:hidden;cursor:none}
+#cur{position:fixed;width:10px;height:10px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .25s,height .25s;mix-blend-mode:screen}
+#cur-r{position:fixed;width:38px;height:38px;border:1px solid rgba(200,146,42,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+.page{display:none}.page.active{display:block}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:24px 60px;background:linear-gradient(to bottom,rgba(8,6,4,.98),transparent);transition:background .4s}
+nav.scrolled{background:rgba(8,6,4,.97);border-bottom:1px solid rgba(200,146,42,.12)}
+.nav-logo{font-family:'Cinzel',serif;font-size:1.4rem;letter-spacing:.4em;color:var(--cream);text-decoration:none;font-weight:700}.nav-logo span{color:var(--gold2)}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,228,200,.5);text-decoration:none;transition:color .3s}.nav-links a:hover{color:var(--gold2)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-cart-btn{font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;background:transparent;border:1px solid rgba(200,146,42,.5);color:var(--gold2);padding:10px 22px;cursor:none;transition:all .3s;position:relative}.nav-cart-btn:hover{background:var(--gold);color:var(--deep)}
+.cart-badge{position:absolute;top:-8px;right:-8px;background:var(--red);color:#fff;width:18px;height:18px;border-radius:50%;font-size:.55rem;display:none;align-items:center;justify-content:center;font-weight:700}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px}
+.nav-hamburger span{display:block;width:24px;height:1.5px;background:var(--gold2);transition:all .3s}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--deep);z-index:450;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px;transform:translateX(100%);transition:transform .4s ease}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-family:'Cinzel',serif;font-size:1.5rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,228,200,.6);text-decoration:none;transition:color .3s}.mobile-menu a:hover{color:var(--gold2)}
+.mobile-menu-logo{font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.4em;color:rgba(240,228,200,.3);margin-bottom:20px}.mobile-menu-logo span{color:var(--gold)}
+.mobile-divider{width:60px;height:1px;background:rgba(200,146,42,.3)}
+.hero{min-height:100vh;position:relative;display:flex;align-items:flex-end;overflow:hidden;background:linear-gradient(135deg,#080604 0%,#0f0c08 40%,#1a1208 70%,#0e3028 100%)}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,rgba(8,6,4,.85) 0%,rgba(8,6,4,.6) 50%,rgba(8,6,4,.2) 100%);z-index:1;pointer-events:none}
+.hero-geo{z-index:2}.hero-diamond{z-index:2}.hero-content{z-index:3}.scroll-ind{z-index:3}
+.hero-geo::before{content:'';position:absolute;top:-10%;right:-5%;width:600px;height:600px;border:1px solid rgba(200,146,42,.1);border-radius:50%;animation:rotateSlow 30s linear infinite}
+.hero-geo::after{content:'';position:absolute;top:5%;right:5%;width:400px;height:400px;border:1px solid rgba(200,146,42,.06);border-radius:50%;animation:rotateSlow 20s linear infinite reverse}
+.hero-diamond{position:absolute;right:8%;top:50%;width:350px;height:350px;border:1px solid rgba(200,146,42,.13);transform:translateY(-50%) rotate(45deg);pointer-events:none}.hero-diamond::before{content:'';position:absolute;inset:20px;border:1px solid rgba(200,146,42,.07)}
+.hero-content{position:relative;z-index:10;padding:0 60px 100px;max-width:680px}
+.hero-eyebrow{font-size:.62rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:0;animation:fadeUp .8s .3s forwards;display:flex;align-items:center;gap:14px}.hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--gold);flex-shrink:0}
+.hero-title{font-family:'Cinzel',serif;font-size:clamp(4rem,7vw,8rem);font-weight:900;line-height:.92;color:var(--cream);margin-bottom:14px;opacity:0;animation:fadeUp .9s .5s forwards}.hero-title .gld{color:var(--gold2)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2vw,1.9rem);font-style:italic;font-weight:300;color:rgba(240,228,200,.55);margin-bottom:32px;opacity:0;animation:fadeUp .9s .7s forwards}
+.hero-desc{font-size:.84rem;line-height:2;color:rgba(240,228,200,.42);max-width:400px;margin-bottom:48px;opacity:0;animation:fadeUp .9s .9s forwards;font-weight:300}
+.hero-ctas{display:flex;align-items:center;gap:24px;opacity:0;animation:fadeUp .9s 1.1s forwards}
+.btn-royal{display:inline-block;background:var(--gold);color:var(--deep);padding:16px 44px;font-family:'Cinzel',serif;font-size:.65rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;border:none;cursor:none;position:relative;overflow:hidden;transition:all .35s}.btn-royal::before{content:'';position:absolute;inset:0;background:var(--gold2);transform:translateX(-100%);transition:transform .4s;z-index:0}.btn-royal span{position:relative;z-index:1}.btn-royal:hover::before{transform:translateX(0)}
+.btn-outline{display:inline-block;border:1px solid rgba(200,146,42,.4);color:rgba(240,228,200,.65);padding:15px 34px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .3s}.btn-outline:hover{border-color:var(--gold2);color:var(--gold2)}
+.scroll-ind{position:absolute;bottom:40px;right:60px;z-index:10;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s 1.6s forwards}
+.scroll-ind span{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(240,228,200,.28);writing-mode:vertical-rl}
+.scroll-line{width:1px;height:56px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease infinite}
+.marquee{background:var(--em);padding:13px 0;overflow:hidden;border-top:1px solid rgba(200,146,42,.14);border-bottom:1px solid rgba(200,146,42,.14)}
+.marquee-track{display:flex;animation:marquee 24s linear infinite;white-space:nowrap}
+.marquee-item{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold2);padding:0 42px;opacity:.72;display:inline-flex;align-items:center;gap:42px}.marquee-item::after{content:'◆';font-size:.32rem;opacity:.5}
+.sec-tag{font-size:.6rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:13px;display:flex;align-items:center;gap:11px}.sec-tag::before{content:'';display:block;width:22px;height:1px;background:var(--gold);flex-shrink:0}
+.sec-title{font-family:'Cinzel',serif;font-size:clamp(2rem,3.5vw,3.5rem);font-weight:700;line-height:1.1;color:var(--cream)}.sec-title em{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold2);font-weight:300}
+.gold-divider{height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:.25}
+.page-back{display:inline-flex;align-items:center;gap:10px;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,228,200,.5);cursor:none;transition:color .3s;background:none;border:none;font-family:'Jost',sans-serif;padding:0}.page-back:hover{color:var(--gold2)}.page-back::before{content:'← '}
+.collections{padding:120px 60px;background:var(--deep)}
+.col-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px}
+.col-grid{display:grid;grid-template-columns:1.55fr 1fr 1fr;gap:18px}
+.col-card{position:relative;overflow:hidden;cursor:none;background:var(--earth)}
+.stock-badge{position:absolute;top:14px;left:14px;background:var(--red);color:var(--cream);font-family:'Jost',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:.05em;padding:6px 12px;z-index:2;text-transform:uppercase}
+.viewers-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Jost',sans-serif;font-size:.78rem;color:var(--gold2);margin-top:10px}
+.viewers-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse-dot 1.6s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.exit-modal{position:fixed;inset:0;background:rgba(8,6,4,.92);z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+.exit-modal.open{display:flex}
+.exit-box{background:var(--deep);border:1px solid var(--gold);max-width:420px;width:100%;padding:48px 36px;text-align:center;position:relative}
+.exit-close{position:absolute;top:16px;right:20px;color:var(--cream);font-size:1.4rem;cursor:none;background:none;border:none}
+.exit-box h3{font-family:'Cinzel',serif;color:var(--gold2);font-size:1.4rem;letter-spacing:.05em;margin-bottom:12px}
+.exit-box p{font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:1.05rem;margin-bottom:24px;opacity:.85}
+.exit-box input{width:100%;padding:14px;background:transparent;border:1px solid rgba(232,192,96,.3);color:var(--cream);font-family:'Jost',sans-serif;margin-bottom:14px}
+.exit-box button.claim-btn{width:100%;background:var(--gold);color:var(--deep);padding:14px;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:none}
+.col-card.tall{grid-row:1/3}
+.col-img{width:100%;display:block;transition:transform .8s;object-fit:cover}
+.col-card.tall .col-img{height:700px;object-fit:cover}
+.col-card:not(.tall) .col-img{height:330px;object-fit:cover}
+.col-card:hover .col-img{transform:scale(1.05)}
+.col-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,6,4,.88) 0%,transparent 55%);pointer-events:none}
+.col-view{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(18px);background:var(--gold);color:var(--deep);padding:13px 28px;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:none;opacity:0;transition:all .35s;white-space:nowrap;z-index:5;pointer-events:none}
+.col-card:hover .col-view{opacity:1;transform:translate(-50%,-50%) translateY(0)}
+.col-info{position:absolute;bottom:0;left:0;right:0;padding:26px 22px;z-index:4;pointer-events:none}
+.col-name{font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;color:var(--cream);margin-bottom:5px}
+.col-meta{display:flex;justify-content:space-between;align-items:center}
+.col-type{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);font-weight:300}
+.col-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold2)}
+.legacy{display:grid;grid-template-columns:1fr 1fr;min-height:80vh}
+.leg-left{background:var(--em);position:relative;overflow:hidden;padding:100px 80px;display:flex;flex-direction:column;justify-content:center}
+.leg-left::before{content:'';position:absolute;bottom:-25%;left:-10%;width:480px;height:480px;border:1px solid rgba(200,146,42,.07);border-radius:50%}
+.leg-num{font-family:'Cormorant Garamond',serif;font-size:8.5rem;font-weight:300;color:rgba(200,146,42,.07);line-height:1;margin-bottom:-18px}
+.leg-body{font-size:.86rem;line-height:2;color:rgba(240,228,200,.47);max-width:400px;margin:22px 0 42px;font-weight:300}
+.leg-right{background:var(--earth);padding:100px 80px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.benin-bg{position:absolute;inset:0;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M0 30L30 0L60 30L30 60Z' fill='none' stroke='rgba(200,146,42,0.06)' stroke-width='1'/%3E%3C/svg%3E")}
+.leg-stats{display:grid;grid-template-columns:1fr 1fr;gap:48px;position:relative;z-index:1}
+.stat-n{font-family:'Cinzel',serif;font-size:2.8rem;font-weight:700;color:var(--gold2);line-height:1}.stat-n sup{font-size:1.1rem;color:var(--gold)}
+.stat-bar{width:32px;height:2px;background:var(--gold);margin:11px 0}
+.stat-l{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(240,228,200,.38);font-weight:300}
+.leg-quote{position:relative;z-index:1;margin-top:56px;border-left:2px solid var(--gold);padding-left:22px}
+.leg-quote p{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-style:italic;color:rgba(240,228,200,.65);line-height:1.6}
+.leg-quote cite{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-top:10px;display:block}
+.lookbook{padding:120px 60px;background:var(--deep)}
+.look-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:64px}
+.look-item{position:relative;overflow:hidden;cursor:none}
+.look-item:nth-child(1){grid-column:1/3;grid-row:1/3}
+.look-item:nth-child(4){grid-column:4;grid-row:1/3}
+.look-img{width:100%;height:100%;object-fit:cover;display:block;min-height:240px;transition:transform .8s}
+.look-item:nth-child(1) .look-img,.look-item:nth-child(4) .look-img{min-height:520px}
+.look-item:hover .look-img{transform:scale(1.06)}
+.look-caption{position:absolute;bottom:0;left:0;right:0;padding:18px;background:linear-gradient(to top,rgba(8,6,4,.82),transparent);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.look-item:hover .look-caption{opacity:1;transform:translateY(0)}
+.look-caption p{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2)}
+.manifesto{padding:140px 60px;background:var(--em);text-align:center;position:relative;overflow:hidden}
+.man-line{width:90px;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);margin:26px auto}
+.manifesto-text{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,2.8vw,2.9rem);font-weight:300;font-style:italic;line-height:1.55;max-width:880px;margin:0 auto 24px;color:var(--cream)}
+.manifesto-text strong{font-weight:600;color:var(--gold2);font-style:normal}
+.manifesto-sub{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.newsletter{background:var(--deep);padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;border-top:1px solid rgba(200,146,42,.1)}
+.nl-right{display:flex;flex-direction:column;gap:14px}
+.nl-input{background:transparent;border:none;border-bottom:1px solid rgba(240,228,200,.14);padding:14px 0;color:var(--cream);font-family:'Jost',sans-serif;font-size:.84rem;font-weight:300;outline:none;transition:border-color .3s}.nl-input::placeholder{color:rgba(240,228,200,.22)}.nl-input:focus{border-color:var(--gold)}
+footer{background:var(--earth);padding:60px 60px 34px;position:relative}
+.foot-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--red),var(--gold),var(--em2),var(--gold),var(--red))}
+.foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px}
+.foot-logo{font-family:'Cinzel',serif;font-size:1.45rem;letter-spacing:.4em;color:var(--cream);font-weight:700;margin-bottom:14px}.foot-logo span{color:var(--gold2)}
+.foot-tag{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:rgba(240,228,200,.38);font-weight:300;line-height:1.6;max-width:210px}
+.foot-col h4{font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.foot-col a{font-size:.76rem;color:rgba(240,228,200,.38);text-decoration:none;transition:color .3s}.foot-col a:hover{color:var(--gold2)}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(240,228,200,.07);padding-top:26px}
+.foot-copy{font-size:.6rem;letter-spacing:.1em;color:rgba(240,228,200,.18)}
+.foot-diamonds{display:flex;gap:7px}.foot-diamonds span{width:7px;height:7px;border:1px solid rgba(200,146,42,.25);transform:rotate(45deg);display:block}.foot-diamonds span:nth-child(2n){background:rgba(200,146,42,.13)}
+/* PRODUCT PAGE */
+#product-page{background:var(--deep);min-height:100vh;padding-top:100px}
+.pd-back-wrap{padding:0 60px 40px}
+.pd-container{display:grid;grid-template-columns:1fr 1fr;gap:80px;padding:0 60px 60px;max-width:1400px;margin:0 auto}
+.pd-badge{display:inline-block;background:var(--gold);color:var(--deep);font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;font-weight:600;margin-bottom:12px}
+.pd-main-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:var(--earth)}
+.pd-thumbs{display:flex;gap:10px;margin-top:12px}
+.pd-thumb{width:80px;height:80px;object-fit:cover;cursor:none;border:1px solid transparent;opacity:.6;transition:all .3s}.pd-thumb:hover,.pd-thumb.active{border-color:var(--gold);opacity:1}
+.pd-info{display:flex;flex-direction:column;padding-top:10px}
+.pd-eyebrow{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}.pd-eyebrow::before{content:'';display:block;width:20px;height:1px;background:var(--gold)}
+.pd-name{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;line-height:1.1;color:var(--cream);margin-bottom:10px}
+.pd-price{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--gold2);margin-bottom:12px;font-weight:300}
+.pd-stars{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.pd-stars span:first-child{color:var(--gold);font-size:.9rem}
+.pd-stars span:last-child{font-size:.68rem;color:rgba(240,228,200,.4);text-decoration:underline;text-underline-offset:3px;cursor:none}
+.pd-divider{height:1px;background:linear-gradient(to right,rgba(200,146,42,.3),transparent);margin-bottom:24px}
+.pd-desc{font-size:.86rem;line-height:1.95;color:rgba(240,228,200,.52);margin-bottom:24px;font-weight:300}
+.pd-detail-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(240,228,200,.06)}
+.pd-detail-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);min-width:90px;padding-top:2px}
+.pd-detail-val{font-size:.82rem;color:rgba(240,228,200,.6);font-weight:300}
+.pd-size-row{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}
+.pd-size-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(240,228,200,.5)}
+.size-guide-btn{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);cursor:none;background:none;border:none;font-family:'Jost',sans-serif;text-decoration:underline;text-underline-offset:3px}
+.pd-sizes{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap}
+.size-btn{width:48px;height:48px;border:1px solid rgba(240,228,200,.18);background:transparent;color:rgba(240,228,200,.6);font-family:'Jost',sans-serif;font-size:.75rem;cursor:none;transition:all .3s;display:flex;align-items:center;justify-content:center}.size-btn:hover,.size-btn.sel{border-color:var(--gold);color:var(--gold2);background:rgba(200,146,42,.08)}.size-err{border-color:var(--red)!important}
+.pd-actions{display:flex;gap:14px;margin-bottom:24px}
+.pd-add{flex:1;background:var(--gold);color:var(--deep);padding:18px;font-family:'Cinzel',serif;font-size:.68rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;border:none;cursor:none;position:relative;overflow:hidden;transition:all .35s}.pd-add::before{content:'';position:absolute;inset:0;background:var(--gold2);transform:translateX(-100%);transition:transform .4s}.pd-add span{position:relative;z-index:1}.pd-add:hover::before{transform:translateX(0)}
+.pd-wish{width:56px;border:1px solid rgba(200,146,42,.4);background:transparent;color:var(--gold2);font-size:1.2rem;cursor:none;transition:all .3s}.pd-wish:hover{background:rgba(200,146,42,.1)}
+.pd-guarantee{display:flex;align-items:center;gap:12px;padding:16px 20px;border:1px solid rgba(200,146,42,.18);background:rgba(200,146,42,.04);margin-bottom:0}
+.pd-guarantee p{font-size:.72rem;color:rgba(240,228,200,.5);line-height:1.5}.pd-guarantee strong{color:var(--gold2)}
+/* STORY SECTION */
+.story-wrap{background:var(--em);padding:80px 60px}
+.story-inner{display:grid;grid-template-columns:1fr 1.5fr;gap:80px;max-width:1400px;margin:0 auto;align-items:start}
+.story-left .sec-tag{margin-bottom:16px}
+.story-product-name{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;color:var(--cream);line-height:1.2;margin-bottom:14px}
+.story-origin{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--gold);line-height:1.6}
+.story-body{font-size:.9rem;line-height:2.1;color:rgba(240,228,200,.62);font-weight:300;letter-spacing:.02em}
+/* REVIEWS */
+.reviews-wrap{padding:80px 60px;background:var(--deep)}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+.review-card{background:var(--earth);padding:28px;border:1px solid rgba(200,146,42,.1)}
+.review-stars{color:var(--gold);font-size:.85rem;margin-bottom:10px;letter-spacing:2px}
+.review-text{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(240,228,200,.65);line-height:1.7;margin-bottom:16px}
+.review-author{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:flex;justify-content:space-between}
+.review-author span:last-child{color:rgba(240,228,200,.3)}
+/* SIZE MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(8,6,4,.88);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--earth);border:1px solid rgba(200,146,42,.2);max-width:700px;width:100%;max-height:85vh;overflow-y:auto}
+.modal-head{padding:24px 32px;border-bottom:1px solid rgba(200,146,42,.15);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--earth)}
+.modal-head h3{font-family:'Cinzel',serif;font-size:1rem;color:var(--cream);letter-spacing:.08em}
+.modal-x{background:none;border:none;color:rgba(240,228,200,.4);font-size:1.4rem;cursor:none;line-height:1;transition:color .3s}.modal-x:hover{color:var(--gold2)}
+.modal-body{padding:32px}
+.sz-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.sz-table th{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);padding:10px 14px;border-bottom:1px solid rgba(200,146,42,.2);text-align:left;font-weight:400}
+.sz-table td{font-size:.82rem;color:rgba(240,228,200,.65);padding:12px 14px;border-bottom:1px solid rgba(240,228,200,.05);font-weight:300}
+.sz-table tr:hover td{background:rgba(200,146,42,.04)}
+.sz-tip{background:rgba(200,146,42,.07);border-left:2px solid var(--gold);padding:14px 18px;margin-bottom:24px;font-size:.78rem;color:rgba(240,228,200,.6);line-height:1.7}.sz-tip strong{color:var(--gold2)}
+/* CART */
+#cart-page{background:var(--deep);min-height:100vh;padding-top:100px}
+.cart-wrap{max-width:1100px;margin:0 auto;padding:0 60px 100px}
+.cart-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:50px}
+.cart-table{width:100%;border-collapse:collapse;margin-bottom:40px}
+.cart-table th{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);padding:0 0 16px;border-bottom:1px solid rgba(200,146,42,.2);font-weight:400;text-align:left}
+.cart-table th:last-child{text-align:right}
+.cart-row td{padding:24px 0;border-bottom:1px solid rgba(240,228,200,.06);vertical-align:middle}
+.cart-img{width:80px;height:80px;object-fit:cover}
+.cart-info{padding-left:18px}
+.cart-item-name{font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;color:var(--cream);margin-bottom:4px}
+.cart-rm{background:none;border:none;color:rgba(240,228,200,.25);font-size:.7rem;cursor:none;text-transform:uppercase;letter-spacing:.1em;font-family:'Jost',sans-serif;transition:color .3s}.cart-rm:hover{color:var(--red)}
+.cart-qty{display:flex;align-items:center;gap:12px}
+.qty-btn{width:32px;height:32px;border:1px solid rgba(200,146,42,.3);background:transparent;color:var(--gold2);font-size:1rem;cursor:none;transition:all .3s;display:flex;align-items:center;justify-content:center}.qty-btn:hover{background:rgba(200,146,42,.12)}
+.qty-n{font-family:'Cinzel',serif;font-size:.9rem;min-width:24px;text-align:center}
+.cart-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold2);text-align:right}
+.cart-summary{background:var(--earth);padding:32px;border:1px solid rgba(200,146,42,.12);max-width:380px;margin-left:auto}
+.cs-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(240,228,200,.06)}
+.cs-row.total{border-bottom:none;padding-top:16px}
+.cs-label{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,228,200,.5)}
+.cs-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--cream)}
+.cs-row.total .cs-label{color:var(--gold)}
+.cs-row.total .cs-val{font-size:1.6rem;color:var(--gold2)}
+.promo-row{display:flex;gap:10px;margin:16px 0 4px}
+.promo-input{flex:1;background:transparent;border:1px solid rgba(240,228,200,.12);color:var(--cream);font-family:'Jost',sans-serif;font-size:.8rem;padding:10px 14px;outline:none;transition:border-color .3s}.promo-input:focus{border-color:var(--gold)}.promo-input::placeholder{color:rgba(240,228,200,.2)}
+.promo-btn{background:var(--gold);color:var(--deep);border:none;padding:10px 18px;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;cursor:none}
+.promo-msg{font-size:.7rem;min-height:22px;padding:4px 0}.promo-ok{color:#6dbf6d}.promo-err{color:var(--red)}
+.cart-checkout-btn{width:100%;margin-top:14px;padding:18px;background:var(--gold);color:var(--deep);font-family:'Cinzel',serif;font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;border:none;cursor:none;position:relative;overflow:hidden}.cart-checkout-btn::before{content:'';position:absolute;inset:0;background:var(--gold2);transform:translateX(-100%);transition:transform .4s}.cart-checkout-btn span{position:relative;z-index:1}.cart-checkout-btn:hover::before{transform:translateX(0)}
+.cart-empty{text-align:center;padding:100px 0}
+.cart-empty p{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:rgba(240,228,200,.3);margin-bottom:28px}
+.discount-line{color:#6dbf6d!important}
+/* CHECKOUT */
+#checkout-page{background:var(--deep);min-height:100vh;padding-top:100px}
+.co-wrap{max-width:1100px;margin:0 auto;padding:0 60px 100px;display:grid;grid-template-columns:1fr 420px;gap:60px}
+.co-section{margin-bottom:36px}
+.co-section h3{font-family:'Cinzel',serif;font-size:1rem;font-weight:600;color:var(--cream);letter-spacing:.08em;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(200,146,42,.15)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+.form-input{background:rgba(240,228,200,.04);border:1px solid rgba(240,228,200,.12);color:var(--cream);font-family:'Jost',sans-serif;font-size:.85rem;font-weight:300;padding:14px 16px;outline:none;transition:border-color .3s}.form-input:focus{border-color:var(--gold)}.form-input::placeholder{color:rgba(240,228,200,.2)}.form-input.err{border-color:var(--red)}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='rgba(200,146,42,0.6)' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select.form-input option{background:var(--earth);color:var(--cream)}
+.pay-note{background:rgba(200,146,42,.06);border:1px solid rgba(200,146,42,.18);padding:20px 24px;font-size:.78rem;line-height:1.8;color:rgba(240,228,200,.55)}.pay-note strong{color:var(--gold2)}
+.place-btn{width:100%;margin-top:28px;padding:20px;background:var(--gold);color:var(--deep);font-family:'Cinzel',serif;font-size:.72rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;border:none;cursor:none;position:relative;overflow:hidden}.place-btn::before{content:'';position:absolute;inset:0;background:var(--gold2);transform:translateX(-100%);transition:transform .4s}.place-btn span{position:relative;z-index:1}.place-btn:hover::before{transform:translateX(0)}
+.order-sidebar{background:var(--earth);padding:32px;border:1px solid rgba(200,146,42,.12);height:fit-content;position:sticky;top:120px}
+.order-sidebar h3{font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;color:var(--cream);letter-spacing:.08em;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(200,146,42,.15)}
+.order-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(240,228,200,.06)}
+.order-item img{width:64px;height:64px;object-fit:cover;flex-shrink:0}
+.oi-info{flex:1}
+.oi-name{font-family:'Cinzel',serif;font-size:.78rem;font-weight:600;color:var(--cream);margin-bottom:3px}
+.oi-sub{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(240,228,200,.4)}
+.oi-price{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--gold2);align-self:center;flex-shrink:0}
+.ot-row{display:flex;justify-content:space-between;padding:8px 0;font-size:.78rem;color:rgba(240,228,200,.5)}
+.ot-row.grand{border-top:1px solid rgba(200,146,42,.2);margin-top:8px;padding-top:16px}
+.ot-row.grand span:first-child{font-family:'Cinzel',serif;font-size:.72rem;color:var(--gold);text-transform:uppercase}
+.ot-row.grand span:last-child{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold2)}
+/* CONFIRM */
+#confirm-page{background:var(--deep);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 60px}
+.confirm-inner{text-align:center;max-width:700px;width:100%}
+.confirm-icon{font-size:4rem;margin-bottom:20px}
+.confirm-title{font-family:'Cinzel',serif;font-size:clamp(2rem,4vw,4rem);font-weight:900;color:var(--cream);margin-bottom:10px}
+.confirm-title span{color:var(--gold2)}
+.confirm-sub{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-style:italic;color:rgba(240,228,200,.5);margin-bottom:32px}
+.confirm-box{background:var(--earth);border:1px solid rgba(200,146,42,.2);padding:36px 48px;margin-bottom:28px;text-align:left}
+.confirm-box h4{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.cd{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(240,228,200,.06);font-size:.82rem}
+.cd:last-of-type{border-bottom:none}
+.cd span:first-child{color:rgba(240,228,200,.4);font-weight:300}
+.cd span:last-child{color:var(--cream)}
+.confirm-total{display:flex;justify-content:space-between;padding-top:20px;margin-top:8px;border-top:1px solid rgba(200,146,42,.2)}
+.confirm-total span:first-child{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.confirm-total span:last-child{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold2)}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#fff;padding:14px 28px;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;margin-bottom:16px;transition:background .3s}.wa-btn:hover{background:#1da851}
+.confirm-msg{font-size:.8rem;color:rgba(240,228,200,.35);line-height:1.8;margin-bottom:32px;font-weight:300}
+/* TOAST */
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--gold);color:var(--deep);padding:14px 32px;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;z-index:1000;transition:transform .4s,opacity .4s;opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:32px;right:32px;width:54px;height:54px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:400;cursor:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .3s;text-decoration:none}.wa-float:hover{transform:scale(1.1)}
+.wa-float svg{width:26px;height:26px;fill:#fff}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes rotateSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+.reveal{opacity:0;transform:translateY(32px) scale(.98);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}.reveal.visible{opacity:1;transform:translateY(0) scale(1)}
+.reveal-l{opacity:0;transform:translateX(-40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}.reveal-l.visible{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}.reveal-r.visible{opacity:1;transform:translateX(0)}
+@media(max-width:900px){
+  nav{padding:20px 24px}.nav-links{display:none}.nav-hamburger{display:flex}
+  .hero-content{padding:0 24px 80px}
+  .collections,.lookbook,.manifesto,.newsletter,.reviews-wrap,.story-wrap{padding-left:24px;padding-right:24px}
+  .col-grid{grid-template-columns:1fr 1fr}.col-card.tall{grid-row:auto}
+  .look-grid{grid-template-columns:1fr 1fr}.look-item:nth-child(1),.look-item:nth-child(4){grid-column:auto;grid-row:auto}
+  .look-item:nth-child(1) .look-img,.look-item:nth-child(4) .look-img{min-height:240px}
+  .legacy{grid-template-columns:1fr}.newsletter{grid-template-columns:1fr}
+  .pd-container{grid-template-columns:1fr;gap:36px;padding:0 24px 40px}.pd-back-wrap{padding:0 24px 32px}
+  .story-inner{grid-template-columns:1fr;gap:32px}
+  .reviews-grid{grid-template-columns:1fr}
+  .cart-wrap{padding:0 24px 60px}
+  .co-wrap{grid-template-columns:1fr;padding:0 24px 60px}.form-row{grid-template-columns:1fr}
+  .leg-left,.leg-right{padding:70px 36px}
+  footer{padding:56px 24px 32px}.foot-top{grid-template-columns:1fr 1fr;gap:32px}
+  .confirm-box{padding:24px 20px}.confirm-inner{padding:0 4px}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-r"></div>
+<div class="toast" id="toast"></div>
+
+<!-- SIZE MODAL -->
+<div class="modal-bg" id="size-modal">
+  <div class="modal">
+    <div class="modal-head"><h3>Size Guide — Zeevano</h3><button class="modal-x" onclick="closeSizeGuide()">✕</button></div>
+    <div class="modal-body">
+      <div class="sz-tip"><strong>How to measure:</strong> Use a soft tape. Chest — around the fullest part. Waist — natural waistline. For a looser fit, size up.</div>
+      <h4 style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 14px">Men's Tops & Tanks</h4>
+      <table class="sz-table"><thead><tr><th>Size</th><th>Chest (cm)</th><th>Length (cm)</th><th>Shoulder (cm)</th></tr></thead><tbody>
+        <tr><td>XS</td><td>86–90</td><td>68</td><td>41</td></tr><tr><td>S</td><td>90–96</td><td>71</td><td>43</td></tr>
+        <tr><td>M</td><td>96–102</td><td>74</td><td>45</td></tr><tr><td>L</td><td>102–108</td><td>77</td><td>47</td></tr>
+        <tr><td>XL</td><td>108–116</td><td>80</td><td>50</td></tr><tr><td>XXL</td><td>116–124</td><td>83</td><td>53</td></tr>
+      </tbody></table>
+      <h4 style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:20px 0 14px">Tracksuit</h4>
+      <table class="sz-table"><thead><tr><th>Size</th><th>Chest (cm)</th><th>Waist (cm)</th><th>Inseam (cm)</th></tr></thead><tbody>
+        <tr><td>S</td><td>90–96</td><td>74–80</td><td>78</td></tr><tr><td>M</td><td>96–102</td><td>80–86</td><td>80</td></tr>
+        <tr><td>L</td><td>102–108</td><td>86–92</td><td>82</td></tr><tr><td>XL</td><td>108–116</td><td>92–100</td><td>83</td></tr>
+        <tr><td>XXL</td><td>116–124</td><td>100–108</td><td>84</td></tr>
+      </tbody></table>
+      <h4 style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:20px 0 14px">Women's Sports Bra</h4>
+      <table class="sz-table"><thead><tr><th>Size</th><th>Band (cm)</th><th>Bust (cm)</th></tr></thead><tbody>
+        <tr><td>XS</td><td>60–65</td><td>80–84</td></tr><tr><td>S</td><td>65–70</td><td>84–88</td></tr>
+        <tr><td>M</td><td>70–76</td><td>88–94</td></tr><tr><td>L</td><td>76–82</td><td>94–100</td></tr>
+        <tr><td>XL</td><td>82–88</td><td>100–106</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo" onclick="showPage('home');return false">ZEE<span>VANO</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home');goto('collections');return false">Collections</a></li>
+    <li><a href="#" onclick="showPage('home');goto('legacy');return false">Legacy</a></li>
+    <li><a href="#" onclick="showPage('home');goto('lookbook');return false">Lookbook</a></li>
+    <li><a href="#" onclick="showPage('home');goto('newsletter');return false">Join</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-cart-btn" onclick="showPage('cart')">Bag <span id="cart-badge" class="cart-badge">0</span></button>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mob-menu">
+  <div class="mobile-menu-logo">ZEE<span>VANO</span></div>
+  <div class="mobile-divider"></div>
+  <a href="#" onclick="closeMenu();showPage('home');goto('collections');return false">Collections</a>
+  <a href="#" onclick="closeMenu();showPage('home');goto('legacy');return false">Legacy</a>
+  <a href="#" onclick="closeMenu();showPage('home');goto('lookbook');return false">Lookbook</a>
+  <a href="#" onclick="closeMenu();showPage('home');goto('newsletter');return false">Join</a>
+  <div class="mobile-divider"></div>
+  <a href="#" onclick="closeMenu();showPage('cart');return false">🛍 My Bag</a>
+</div>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/2349034989146" target="_blank" class="wa-float">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- HOME -->
+<div id="home-page" class="page active">
+  <section class="hero" style="background-image:url('hero.png');background-size:cover;background-position:center top;">
+    <div class="hero-geo"></div>
+    <div class="hero-diamond"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Born from the Benin Kingdom</p>
+      <h1 class="hero-title">DESCENDED<br><span class="gld">FROM GREATNESS</span></h1>
+      <p class="hero-sub">Born from the Benin Kingdom. Built for the World.</p>
+      <p class="hero-desc">Zeevano is not just clothing. When you put on Zeevano, you carry the spirit of African kings — the strength of the Oba, the elegance of the court, the fire of a people who built empires.</p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-royal" onclick="goto('collections');return false"><span>Explore Collection</span></a>
+        <a href="#" class="btn-outline" onclick="goto('legacy');return false">Our Story</a>
+      </div>
+    </div>
+    <div class="scroll-ind"><span>Scroll</span><div class="scroll-line"></div></div>
+  </section>
+
+  <div class="marquee"><div class="marquee-track">
+    <span class="marquee-item">African Royalty</span><span class="marquee-item">Benin Kingdom</span><span class="marquee-item">Descended from Greatness</span><span class="marquee-item">Global Heritage</span><span class="marquee-item">Zeevano</span><span class="marquee-item">Est. 2026</span><span class="marquee-item">Forged by Kings. Worn by Warriors.</span>
+    <span class="marquee-item">African Royalty</span><span class="marquee-item">Benin Kingdom</span><span class="marquee-item">Descended from Greatness</span><span class="marquee-item">Global Heritage</span><span class="marquee-item">Zeevano</span><span class="marquee-item">Est. 2026</span><span class="marquee-item">Forged by Kings. Worn by Warriors.</span>
+  </div></div>
+
+  <section class="collections" id="collections">
+    <div class="col-header reveal">
+      <div><p class="sec-tag">The Collection</p><h2 class="sec-title">Dressed for <em>Greatness</em></h2></div>
+      <a href="#" class="btn-outline">View All</a>
+    </div>
+    <div class="col-grid" id="col-grid"></div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <section class="legacy" id="legacy">
+    <div class="leg-left reveal-l">
+      <div class="leg-num">01</div>
+      <p class="sec-tag">Our Legacy</p>
+      <h2 class="sec-title">Rooted in<br><em>African Greatness</em></h2>
+      <p class="leg-body">Zeevano was born from the Benin Kingdom — one of Africa's greatest empires. A civilisation of warriors, artists, and kings. We carry that lineage forward. Every stitch is a declaration. Every piece is armour for the modern world.</p>
+      <a href="#" class="btn-royal"><span>Read Our Story</span></a>
+    </div>
+    <div class="leg-right reveal-r">
+      <div class="benin-bg"></div>
+      <div class="leg-stats">
+        <div><div class="stat-n">100<sup>%</sup></div><div class="stat-bar"></div><div class="stat-l">African Roots</div></div>
+        <div><div class="stat-n">3</div><div class="stat-bar"></div><div class="stat-l">Continents</div></div>
+        <div><div class="stat-n">∞</div><div class="stat-bar"></div><div class="stat-l">Legacy to Build</div></div>
+        <div><div class="stat-n">1<sup>st</sup></div><div class="stat-bar"></div><div class="stat-l">Drop — 2026</div></div>
+      </div>
+      <div class="leg-quote"><p>"When you put on Zeevano, you're not just wearing a cloth — you're wearing royalty."</p><cite>— The Founder</cite></div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <section class="lookbook" id="lookbook">
+    <div class="reveal"><p class="sec-tag">The Lookbook</p><h2 class="sec-title">Power Looks <em>Like This</em></h2></div>
+    <div class="look-grid">
+      <div class="look-item reveal"><img src="look10.png" class="look-img"><div class="look-caption"><p>Crop Tee Set — Triple Shot</p></div></div>
+      <div class="look-item reveal"><img src="look3.png" class="look-img"><div class="look-caption"><p>Ezomo Tracksuit — West Africa</p></div></div>
+      <div class="look-item reveal"><img src="look12.png" class="look-img"><div class="look-caption"><p>Crown Sports Bra</p></div></div>
+      <div class="look-item reveal"><img src="look2.png" class="look-img"><div class="look-caption"><p>Ezomo Tracksuit — North Africa</p></div></div>
+    </div>
+  </section>
+
+  <div class="gold-divider"></div>
+
+  <section class="manifesto">
+    <div class="man-line"></div>
+    <p class="manifesto-text reveal">"Zeevano is <strong>royalty</strong> — not inherited, but earned. Worn by those who carry the blood of empires, the spirit of kings, and the hunger to <strong>conquer the world</strong>."</p>
+    <div class="man-line"></div>
+    <p class="manifesto-sub reveal">The Zeevano Manifesto — Est. 2026</p>
+  </section>
+
+  <section class="newsletter" id="newsletter">
+    <div class="reveal-l">
+      <p class="sec-tag">Inner Circle</p>
+      <h2 class="sec-title">Join the<br><em>Royal Court</em></h2>
+      <p style="font-size:.84rem;line-height:1.95;color:rgba(240,228,200,.4);margin-top:18px;max-width:350px;font-weight:300">First access to drops and the Zeevano story as it unfolds.</p>
+    </div>
+    <div class="nl-right reveal-r">
+      <input class="nl-input" type="text" placeholder="Your Name">
+      <input class="nl-input" type="email" placeholder="Email Address">
+      <button class="btn-royal" style="align-self:flex-start;margin-top:10px"><span>Join the Court</span></button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-bar"></div>
+    <div class="foot-top">
+      <div><div class="foot-logo">ZEE<span>VANO</span></div><p class="foot-tag">Descended from Greatness.<br>Born from the Benin Kingdom. Built for the world.</p></div>
+      <div class="foot-col"><h4>Shop</h4><ul><li><a href="#">Men's</a></li><li><a href="#">Women's</a></li><li><a href="#">Accessories</a></li><li><a href="#">New Arrivals</a></li></ul></div>
+      <div class="foot-col"><h4>Brand</h4><ul><li><a href="#">Our Story</a></li><li><a href="#">Heritage</a></li><li><a href="#">Lookbook</a></li><li><a href="#">Journal</a></li></ul></div>
+      <div class="foot-col"><h4>Follow</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">TikTok</a></li><li><a href="#">Twitter / X</a></li><li><a href="#">YouTube</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <p class="foot-copy">© 2026 Zeevano. All rights reserved. Born in Africa. Built for the World.</p>
+      <div class="foot-diamonds"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+  </footer>
+</div>
+
+<!-- PRODUCT PAGE -->
+<div id="product-page" class="page">
+  <div class="pd-back-wrap"><button class="page-back" onclick="showPage('home')">Back to Collection</button></div>
+  <div class="pd-container">
+    <div>
+      <div class="pd-badge" id="pd-badge"></div>
+      <img src="" alt="" class="pd-main-img" id="pd-img">
+      <div class="pd-thumbs" id="pd-thumbs"></div>
+    </div>
+    <div class="pd-info">
+      <p class="pd-eyebrow" id="pd-cat"></p>
+      <h1 class="pd-name" id="pd-name"></h1>
+      <div class="pd-price" id="pd-price"></div>
+      <div id="pd-stock" style="font-family:'Jost',sans-serif;font-size:.82rem;margin-bottom:8px;min-height:1.2em"></div>
+      <div class="pd-stars"><span>★★★★★</span><span onclick="document.getElementById('reviews-wrap').scrollIntoView({behavior:'smooth'})">See reviews</span></div>
+      <div class="pd-divider"></div>
+      <p class="pd-desc" id="pd-desc"></p>
+      <div id="pd-details"></div>
+      <div class="pd-size-row">
+        <span class="pd-size-label">Select Size</span>
+        <button class="size-guide-btn" onclick="openSizeGuide()">Size Guide →</button>
+      </div>
+      <div class="pd-sizes" id="pd-sizes"></div>
+      <div class="pd-actions">
+        <button class="pd-add" onclick="addToCart()"><span>Add to Cart — Descended from Greatness</span></button>
+        <button class="pd-wish" id="wish-btn" onclick="toggleWish(this)">♡</button>
+      </div>
+      <div class="pd-guarantee"><div style="font-size:1.2rem">👑</div><p><strong>Royal Quality Guarantee.</strong> Every Zeevano piece is crafted with intention. Born in Africa, built to last.</p></div>
+    </div>
+  </div>
+  <!-- STORY -->
+  <div class="story-wrap">
+    <div class="story-inner">
+      <div class="story-left">
+        <p class="sec-tag">The Story Behind the Piece</p>
+        <h2 class="story-product-name" id="story-name"></h2>
+        <p class="story-origin" id="story-origin"></p>
+      </div>
+      <div>
+        <p class="story-body" id="story-body"></p>
+      </div>
+    </div>
+  </div>
+  <!-- REVIEWS -->
+  <div class="reviews-wrap" id="reviews-wrap">
+    <p class="sec-tag">What They Say</p>
+    <h2 class="sec-title">Customer <em>Reviews</em></h2>
+    <div class="reviews-grid" id="reviews-grid"></div>
+  </div>
+</div>
+
+<!-- CART -->
+<div id="cart-page" class="page">
+  <div class="cart-wrap">
+    <div class="cart-head">
+      <div><p class="sec-tag">Your Selection</p><h2 class="sec-title">Your <em>Bag</em></h2></div>
+      <button class="btn-outline" onclick="showPage('home')" style="cursor:none">← Continue Shopping</button>
+    </div>
+    <div id="cart-content"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div id="checkout-page" class="page">
+  <div class="co-wrap">
+    <div>
+      <div style="margin-bottom:40px">
+        <button class="page-back" onclick="showPage('cart')" style="margin-bottom:20px">Back to Bag</button>
+        <p class="sec-tag">Complete Your Order</p>
+        <h2 class="sec-title">Check<em>out</em></h2>
+      </div>
+      <div class="co-section">
+        <h3>Personal Details</h3>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="f-fname" type="text" placeholder="Chukwuemeka"></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="f-lname" type="text" placeholder="Okafor"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="f-email" type="email" placeholder="you@email.com"></div>
+          <div class="form-group"><label class="form-label">Phone / WhatsApp</label><input class="form-input" id="f-phone" type="tel" placeholder="+234 800 000 0000"></div>
+        </div>
+      </div>
+      <div class="co-section">
+        <h3>Delivery Address</h3>
+        <div class="form-row full"><div class="form-group"><label class="form-label">Street Address</label><input class="form-input" id="f-street" type="text" placeholder="12 Victoria Island"></div></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">City</label><input class="form-input" id="f-city" type="text" placeholder="Lagos"></div>
+          <div class="form-group"><label class="form-label">State</label>
+            <select class="form-input" id="f-state">
+              <option value="">Select State</option>
+              <option>Abia</option><option>Adamawa</option><option>Akwa Ibom</option><option>Anambra</option><option>Bauchi</option><option>Bayelsa</option><option>Benue</option><option>Borno</option><option>Cross River</option><option>Delta</option><option>Ebonyi</option><option>Edo</option><option>Ekiti</option><option>Enugu</option><option>FCT Abuja</option><option>Gombe</option><option>Imo</option><option>Jigawa</option><option>Kaduna</option><option>Kano</option><option>Katsina</option><option>Kebbi</option><option>Kogi</option><option>Kwara</option><option>Lagos</option><option>Nasarawa</option><option>Niger</option><option>Ogun</option><option>Ondo</option><option>Osun</option><option>Oyo</option><option>Plateau</option><option>Rivers</option><option>Sokoto</option><option>Taraba</option><option>Yobe</option><option>Zamfara</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row full"><div class="form-group"><label class="form-label">Notes (Optional)</label><input class="form-input" id="f-notes" type="text" placeholder="Landmark, instructions..."></div></div>
+      </div>
+      <div class="co-section">
+        <h3>Payment</h3>
+        <div class="pay-note">💳 &nbsp;<strong>Payment coming soon.</strong> Place your order and we will contact you via WhatsApp to confirm payment and arrange delivery. <strong>No card details needed yet.</strong></div>
+      </div>
+      <button class="place-btn" onclick="placeOrder()"><span>👑 Place Order</span></button>
+    </div>
+    <div class="order-sidebar" id="order-sidebar"></div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div id="confirm-page" class="page">
+  <div class="confirm-inner">
+    <div class="confirm-icon">👑</div>
+    <h1 class="confirm-title">Order <span>Placed!</span></h1>
+    <p class="confirm-sub">Your royalty is on its way.</p>
+    <div class="confirm-box" id="confirm-box"></div>
+    <p class="confirm-msg" id="confirm-msg"></p>
+    <a id="wa-link" href="#" target="_blank" class="wa-btn">
+      <svg viewBox="0 0 24 24" width="18" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Send Order via WhatsApp
+    </a><br>
+    <button class="btn-royal" onclick="showPage('home');resetCart()" style="margin-top:12px"><span>Continue Shopping</span></button>
+  </div>
+</div>
+
+<script>
+const WA = '2349034989146';
+const PROMOS = {'ZEEVANO10':10,'ROYALTY15':15,'BENIN20':20};
+
+const P = [
+  {name:'Ezomo Tracksuit',naira:189000,cat:"Men's · Street Luxury",badge:'General Series',img:'prod1.png',
+   desc:'Named after the Ezomo — the supreme military commander of the Benin Kingdom. Black tracksuit with bold red diagonal stripes and ZEEVANO on the chest. This is not sportswear. This is the uniform of a general.',
+   origin:'The Ezomo was the most powerful military title in the Benin Kingdom. The only chief permitted to keep a royal leopard. Second only to the Oba himself.',
+   story:'In the Benin Kingdom there was one man the Oba trusted above all others in times of war — the Ezomo. Supreme commander. The kingdom shield. The red stripes on this tracksuit are not decoration. They are war paint. The black is armour. The ZEEVANO on the chest is the seal of the court. This is not a gym set. This is not streetwear. This is what you wear when you are the one people answer to. The Ezomo did not follow orders. He gave them.',
+   details:[{l:'Material',v:'Heavy Polyester-Cotton Blend'},{l:'Includes',v:'Jacket + Wide-leg Cargo Jogger'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Ogiso — The Sky Kings of Benin'},{l:'Care',v:'Machine wash cold, hang dry'}],
+   sizes:['S','M','L','XL','XXL'],
+   reviews:[
+     {s:5,t:'"Best tracksuit I have owned. The red stripe and the history behind it — I feel like royalty."',n:'Seun A.',d:'Feb 2026'},
+     {s:5,t:'"The gold crest is a beautiful touch. Quality stitching throughout. Very impressed."',n:'Ola B.',d:'Jan 2026'},
+     {s:5,t:'"Wore this to training and to dinner straight after. That is how versatile it is."',n:'Femi D.',d:'Jan 2026'}
+   ]},
+  {name:'Crown Sports Bra',naira:75000,cat:"Women's · Active Royalty",badge:'Iyoba Collection',img:'prod2.png',
+   desc:'Named after the Queen Mother of Benin — one of the most powerful women in African royal history. Deep black racerback with red side panels and a gold Zeevano crest. High support, compression fit.',
+   origin:'Iyoba — the Queen Mother of Benin. One of the most powerful titles in the entire kingdom, held by a woman.',
+   story:'The Iyoba was not a decoration. She was a ruler. In the Benin Kingdom, the Queen Mother held her own court, her own chiefs, her own palace. She was consulted on matters of war, succession, and governance. She wore coral beads from head to chest — red, gold, and black — the same colours on this piece. This is for the woman who trains like she rules. High support, racerback, moisture-wicking compression fabric. The Zeevano crest on the chest in gold. The Iyoba would approve.',
+   details:[{l:'Material',v:'82% Nylon, 18% Spandex'},{l:'Fit',v:'High support, compression racerback'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Iyoba — Queen Mother of the Benin Kingdom'},{l:'Care',v:'Hand wash recommended'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"The Iyoba story gave me chills. The bra itself is elite — beautiful and functional."',n:'Ngozi C.',d:'Feb 2026'},
+     {s:5,t:'"Perfect fit, excellent support. I train hard and this kept up with me all session."',n:'Amara I.',d:'Jan 2026'},
+     {s:5,t:'"The red and gold detail is stunning. Feels like luxury even at the gym."',n:'Blessing O.',d:'Jan 2026'}
+   ]},
+  {name:'Crest Navy Tank',naira:72000,cat:"Men's · Muscle Fit",badge:'Eze Collection',img:'prod3.png',
+   desc:'Named after the title of kingship. Deep navy with a gold shield crest centred on the chest. No text. No graphics. Just the mark. Muscle fit, cotton-modal blend. For those who do not need to be loud to be felt.',
+   origin:'Eze — a word meaning king across multiple Nigerian tongues. The quiet title. The one that needs no introduction.',
+   story:'Not every king wears a crown in public. Some of the most powerful men in the Benin court were identified only by a single emblem — a crest, a mark, a badge that those who needed to know would recognise. This tank is that. Deep navy. Gold shield crest, centred on the chest. No text. No explanation. Cotton-modal blend — one of the softest fabrics we use. For the man who walks into a room and does not need to say a word. His presence says everything. The Eze does not announce himself.',
+   details:[{l:'Material',v:'Cotton-Modal Blend'},{l:'Fit',v:'Muscle fit, high neck'},{l:'Colour',v:'Deep Navy / Gold'},{l:'Reference',v:'Eze — The Title of Kings'},{l:'Care',v:'Cold wash, hang dry'}],
+   sizes:['S','M','L','XL','XXL'],
+   reviews:[
+     {s:5,t:'"The Eze story says it all. Clean, sharp, powerful — this is what Zeevano is about."',n:'Biodun A.',d:'Feb 2026'},
+     {s:5,t:'"The modal blend makes it incredibly soft. Wears beautifully under a jacket too."',n:'Sola M.',d:'Jan 2026'},
+     {s:5,t:'"Bought this as a gift and the person has not stopped wearing it. Quality is evident."',n:'Yemi O.',d:'Jan 2026'}
+   ]},
+  {name:'Crop Hoodie & Booty Shorts Set',naira:145000,cat:"Women's · Street Luxury",badge:'Ezomo Women',img:'prod4.png',
+   desc:'The Ezomo energy — in a womens cut. Black crop zip hoodie with bold red diagonal stripes and gold ZEEVANO text on the chest. Matching booty shorts with red side panels and ZEEVANO on the left leg. Power in every thread.',
+   origin:'The Ezomo was the supreme military commander of the Benin Kingdom. His energy belongs to those who lead — regardless of gender.',
+   story:'Power has no gender in the Benin Kingdom. The Iyoba commanded armies. The Oba consulted women of the court on matters of war. This set carries that same force. The bold red diagonal stripes — war paint. The black — armour. The ZEEVANO on the chest — the seal of the court. Crop hoodie, zip-front, showing the midriff with intention. Matching booty shorts, red panelled, tight and precise. This is not gymwear. This is a statement about who you are when you walk into the room.',
+   details:[{l:'Material',v:'Heavy Polyester-Cotton Blend'},{l:'Includes',v:'Crop Hoodie + Booty Shorts'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Ezomo — Supreme Commander of Benin'},{l:'Care',v:'Machine wash cold, hang dry'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"I wore this out and got stopped three times. The set is fire — quality is unmatched."',n:'Chisom A.',d:'Mar 2026'},
+     {s:5,t:'"The red stripes give it such an athletic royal energy. I feel powerful every time I put it on."',n:'Funke B.',d:'Feb 2026'},
+     {s:5,t:'"Fabric is heavy and premium. This is the kind of set you keep forever."',n:'Adaeze O.',d:'Feb 2026'}
+   ]},
+  {name:'Crop Tee & Booty Shorts Set',naira:125000,cat:"Women's · Athletic",badge:'Predator Women',img:'prod5.png',
+   desc:'Black crop tee with bold red diagonal stripe panels and gold ZEEVANO on the chest. A faded leopard on the back. Matching booty shorts with red panels and ZEEVANO on the left leg. Front and back — designed to be seen from every angle.',
+   origin:'The silent predator does not need to announce herself. Her presence does it for her.',
+   story:'The leopard moves with purpose. Every step calculated. Every move deliberate. This set is designed the same way — the front commands attention with the ZEEVANO crest and red stripes. The back speaks with a faded leopard graphic across the crop tee. Booty shorts matching perfectly. This is for the woman who understands that she does not need to be loud to be unforgettable. The leopard never announces itself. The room already knows.',
+   details:[{l:'Material',v:'Performance Cotton Blend'},{l:'Includes',v:'Crop Tee + Booty Shorts'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Ekpen — The Silent Predator'},{l:'Care',v:'Machine wash cold, hang dry'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"The leopard on the back is everything. The set photographs beautifully."',n:'Temi S.',d:'Mar 2026'},
+     {s:5,t:'"Fit is perfect. The red panels on the shorts hug every curve with intention."',n:'Blessing N.',d:'Feb 2026'},
+     {s:5,t:'"I ordered this and wore it the same day. Absolute fire. Zeevano understands women."',n:'Remi A.',d:'Feb 2026'}
+   ]},
+  {name:'Royal Bodysuit',naira:89000,cat:"Women's · Luxury Basics",badge:'Iyoba Series',img:'prod6.png',
+   desc:'Sleek black bodysuit with bold red vertical side panels and small gold ZEEVANO text on the left chest. Form-fitting and elegant. Named after the most powerful women who ever ruled — and built for those who carry that same energy today.',
+   origin:'The women of the Benin court were not ornaments. They were power. This bodysuit is theirs.',
+   story:'In the Benin Kingdom, a woman of the court wore her status with precision. Every bead placed deliberately. Every garment chosen with meaning. This bodysuit carries that same discipline — a sleek black silhouette with red panels that run the length of the torso like armour plating. Gold ZEEVANO on the chest. Form-fitting, high-quality fabric that moves with the body. This is not a casual piece. This is for the woman who enters a room and changes its energy without saying a word.',
+   details:[{l:'Material',v:'82% Nylon, 18% Spandex'},{l:'Fit',v:'Form-fitting, full coverage'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Iyoba — Women of the Benin Court'},{l:'Care',v:'Hand wash recommended'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"This bodysuit is the most elegant thing I own. The red panels are perfectly placed."',n:'Ngozi E.',d:'Mar 2026'},
+     {s:5,t:'"Quality is exceptional. It fits like it was made for me. Zeevano never disappoints."',n:'Kemi O.',d:'Feb 2026'},
+     {s:5,t:'"I wore this under a blazer and everyone wanted to know the brand. Zeevano is elite."',n:'Aisha D.',d:'Feb 2026'}
+   ]},
+  {name:'Hoodie Dress',naira:135000,cat:"Women's · Street Royalty",badge:'Kingdom Collection',img:'prod7.png',
+   desc:'Black oversized hoodie dress with bold red diagonal stripe panels, gold ZEEVANO on the chest, hitting mid-thigh. Paired with black thigh-high socks with red and black stripes and ZEEVANO on the ankle. A full look built for the streets and the court.',
+   origin:'The Benin court was not only a place of war. It was a place of presence, elegance, and power combined.',
+   story:'Some pieces are not just clothing — they are a look. A complete statement. This hoodie dress is one of those pieces. Oversized, hitting mid-thigh, with the same bold red diagonal stripes that run across the entire Zeevano collection. Gold ZEEVANO on the chest. Wear it with the matching thigh-high socks — black with red stripe detail and a gold ZEEVANO ankle label — and you are not just dressed. You are dressed with the intention of a queen walking into her court.',
+   details:[{l:'Material',v:'Heavy Cotton-Fleece Blend'},{l:'Includes',v:'Hoodie Dress + Thigh-High Socks'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'The Benin Royal Court'},{l:'Care',v:'Machine wash cold, hang dry'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"The hoodie dress with the thigh-highs is a whole look. I get compliments every single time."',n:'Zara B.',d:'Mar 2026'},
+     {s:5,t:'"Heavy fabric, premium construction. This dress will outlast every fast fashion piece I own."',n:'Yetunde A.',d:'Feb 2026'},
+     {s:5,t:'"Bold, feminine, and powerful. Only Zeevano could pull off this combination."',n:'Sade M.',d:'Feb 2026'}
+   ]},
+  {name:'Leggings Set',naira:155000,cat:"Women's · Performance Luxury",badge:'Warrior Women',img:'prod8.png',
+   desc:'Black crop zip jacket with red diagonal stripe panels and gold ZEEVANO — paired with high-waist black leggings with bold red stripe running the full length of the leg. The most complete womens athletic set in the collection.',
+   origin:'Warriors of the Benin Kingdom trained daily. Power is not given — it is built, deliberately, every single day.',
+   story:'The Benin Kingdom was not built in peace alone. It was built in discipline. The warriors who protected the empire trained their bodies the way architects build monuments — with care, with intention, with the long game in mind. This leggings set is for that woman. The one who shows up to the gym and turns the room. Black crop jacket — zip front, red diagonal stripes, gold ZEEVANO on the chest. High-waist leggings — fitted, compressive, with a bold red stripe that runs from hip to ankle. This is athletic wear that refuses to be ordinary.',
+   details:[{l:'Material',v:'Performance Polyester-Spandex Blend'},{l:'Includes',v:'Crop Jacket + High-Waist Leggings'},{l:'Colour',v:'Black / Red / Gold'},{l:'Reference',v:'Benin Kingdom Warriors'},{l:'Care',v:'Machine wash cold, hang dry'}],
+   sizes:['XS','S','M','L','XL'],
+   reviews:[
+     {s:5,t:'"The leggings fit perfectly and the stripe detail is stunning. Best set I have purchased."',n:'Amara C.',d:'Mar 2026'},
+     {s:5,t:'"Wore this to training and could not stop getting compliments. Zeevano is in a league of its own."',n:'Tola F.',d:'Feb 2026'},
+     {s:5,t:'"The jacket and leggings together are elite. Quality, fit, and design — all perfect."',n:'Chidinma O.',d:'Feb 2026'}
+   ]},
+  {name:'Royal Scarf',naira:55000,cat:"Unisex · Luxury Accessory",badge:'Heritage Piece',img:'prod9.png',
+   desc:'Deep black premium scarf with a single bold red stripe and gold ZEEVANO serif text on the end panel. Draped with purpose. An accessory built for those who understand that the details carry the most power.',
+   origin:'In the Benin Kingdom, the way a chief wore his regalia communicated his rank, his power, and his allegiance. Every detail was deliberate.',
+   story:'The Benin court was fluent in the language of objects. A specific bead meant one thing. A specific drape meant another. The scarf in the royal court was not warmth — it was communication. This piece carries that tradition forward. Black premium fabric. A single red stripe — the mark of the court. Gold ZEEVANO text. Wear it draped over a shoulder, wrapped around the neck, or hung from a bag. However you carry it, carry it with intention. That is the only way the kingdom wore anything.',
+   details:[{l:'Material',v:'Premium Cashmere-Blend'},{l:'Colour',v:'Black / Red / Gold'},{l:'Dimensions',v:'180cm × 30cm'},{l:'Reference',v:'Benin Royal Court Regalia'},{l:'Care',v:'Dry clean recommended'}],
+   sizes:['One Size'],
+   reviews:[
+     {s:5,t:'"This scarf is the most luxurious thing I own. The fabric is incredible. Worth every naira."',n:'Emeka S.',d:'Mar 2026'},
+     {s:5,t:'"The red stripe and gold text are subtle but powerful. Everyone notices it."',n:'Kola T.',d:'Feb 2026'},
+     {s:5,t:'"Bought this for my father and he has not taken it off. Zeevano understands heritage."',n:'Funmi A.',d:'Feb 2026'}
+   ]},
+  {name:'Edo Bracelet',naira:25000,cat:"Unisex · Heritage Accessory",badge:'Free Above ₦50K',img:'prod10.png',
+   desc:'Hand-woven cord bracelet in the three royal colours of the Benin court — black, red, and gold. This is not an accessory. It is a mark. Free with every Zeevano order above ₦50,000. Or purchased separately as a declaration.',
+   origin:'Edo — what the people of the Benin Kingdom call themselves. The bracelet carries their three royal colours: black for strength, red for sacrifice, gold for legacy.',
+   story:'You do not buy belonging. It is given. In the Benin Kingdom, when a warrior was accepted into the court, he was given a mark — a cord, a bead, a token that said: you are one of us now. The Edo Bracelet is that mark for Zeevano. Black for the strength it took to build this kingdom. Red for the sacrifice of those who protected it. Gold for the legacy they left behind. Every Zeevano order above ₦50,000 ships with one. Because if you are spending that, you are already part of the court.',
+   details:[{l:'Material',v:'Hand-woven Cord with Gold Hardware'},{l:'Colours',v:'Black / Red / Gold'},{l:'Closure',v:'Adjustable sliding knot'},{l:'Reference',v:'Edo Royal Court Colours'},{l:'Ships Free',v:'With orders above ₦50,000'}],
+   sizes:['One Size'],
+   reviews:[
+     {s:5,t:'"I received this free with my tracksuit and it has not left my wrist since. Meaningful and beautiful."',n:'Segun A.',d:'Mar 2026'},
+     {s:5,t:'"The craftsmanship on this bracelet is remarkable for its size. The colours are perfect."',n:'Ifeanyi O.',d:'Feb 2026'},
+     {s:5,t:'"Bought this separately as a gift. The story on the product page alone is worth the price."',n:'Dami B.',d:'Feb 2026'}
+   ]}
+];
+
+let cart=[],curProd=null,selSize='',discount=0,promoUsed='';
+const fmt=n=>'₦'+n.toLocaleString('en-NG');
+
+// Grid
+function renderGrid(){
+  document.getElementById('col-grid').innerHTML=P.map((p,i)=>`
+    <div class="col-card ${i===0?'tall':''} reveal" onclick="openProduct(${i})" style="cursor:none">
+      <img src="${p.img}" alt="${p.name}" class="col-img">
+      <div class="col-overlay"></div><div class="col-view">View Product</div>
+      ${getStock(p.name)<=5?`<div class="stock-badge">Only ${getStock(p.name)} left</div>`:''}
+      <div class="col-info"><div class="col-name">${p.name}</div>
+      <div class="col-meta"><span class="col-type">${p.cat}</span><span class="col-price">${fmt(p.naira)}</span></div></div>
+    </div>`).join('');
+}
+renderGrid();
+
+// Navigation
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(name+'-page').classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(name==='home')setTimeout(initReveal,150);
+  if(name==='cart')renderCart();
+  if(name==='checkout')renderSidebar();
+}
+function goto(id){setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})},150)}
+
+// Mobile menu
+function toggleMenu(){
+  document.getElementById('mob-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+  document.body.style.overflow=document.getElementById('mob-menu').classList.contains('open')?'hidden':'';
+}
+function closeMenu(){
+  document.getElementById('mob-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// Size guide
+function openSizeGuide(){document.getElementById('size-modal').classList.add('open');document.body.style.overflow='hidden'}
+function closeSizeGuide(){document.getElementById('size-modal').classList.remove('open');document.body.style.overflow=''}
+document.getElementById('size-modal').addEventListener('click',function(e){if(e.target===this)closeSizeGuide()});
+
+// Product page
+function openProduct(id){
+  curProd=id; selSize='';
+  const p=P[id];
+  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('active'));
+  document.getElementById('product-page').classList.add('active');
+  document.getElementById('pd-badge').textContent=p.badge;
+  document.getElementById('pd-img').src=p.img;
+  document.getElementById('pd-img').alt=p.name;
+  document.getElementById('pd-cat').textContent=p.cat;
+  document.getElementById('pd-name').textContent=p.name;
+  document.getElementById('pd-price').innerHTML=`${fmt(p.naira)}<span class="viewers-badge"><span class="viewers-dot"></span>${getViewers()} people viewing this</span>`;
+  document.getElementById('pd-desc').textContent=p.desc;
+  // Stock urgency
+  const stock=getStock(p.name);
+  const stockEl=document.getElementById('pd-stock');
+  if(stockEl){ stockEl.textContent=stock<=5?`⚡ Only ${stock} left in stock — order soon`:''; stockEl.style.color=stock<=3?'#e05252':'var(--gold2)'; }
+  document.getElementById('pd-details').innerHTML=p.details.map(d=>`<div class="pd-detail-row"><span class="pd-detail-label">${d.l}</span><span class="pd-detail-val">${d.v}</span></div>`).join('');
+  document.getElementById('pd-sizes').innerHTML=p.sizes.map(s=>`<button class="size-btn" onclick="selSz(this,'${s}')">${s}</button>`).join('');
+  document.getElementById('pd-thumbs').innerHTML=`<img src="${p.img}" class="pd-thumb active">`;
+  document.getElementById('wish-btn').textContent='♡';
+  document.getElementById('wish-btn').style.color='';
+  document.getElementById('story-name').textContent=p.name;
+  document.getElementById('story-origin').textContent=p.origin;
+  document.getElementById('story-body').textContent=p.story;
+  document.getElementById('reviews-grid').innerHTML=p.reviews.map(r=>`
+    <div class="review-card">
+      <div class="review-stars">${'★'.repeat(r.s)}${'☆'.repeat(5-r.s)}</div>
+      <p class="review-text">${r.t}</p>
+      <div class="review-author"><span>${r.n}</span><span>${r.d}</span></div>
+    </div>`).join('');
+}
+function selSz(el,s){
+  selSize=s;
+  document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('sel','size-err'));
+  el.classList.add('sel');
+}
+function toggleWish(btn){
+  const on=btn.textContent==='♡';
+  btn.textContent=on?'♥':'♡';
+  btn.style.color=on?'var(--red)':'';
+  if(on)toast('Added to Wishlist ♥');
+}
+function addToCart(){
+  if(!selSize){
+    document.querySelectorAll('.size-btn').forEach(b=>b.classList.add('size-err'));
+    setTimeout(()=>document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('size-err')),700);
+    toast('Please select a size'); return;
+  }
+  const p=P[curProd];
+  const ex=cart.find(c=>c.id===curProd&&c.size===selSize);
+  if(ex)ex.qty++; else cart.push({id:curProd,name:p.name,img:p.img,naira:p.naira,size:selSize,qty:1});
+  updateBadge(); toast('Added to bag 👑');
+}
+
+// Cart
+function updateBadge(){
+  const t=cart.reduce((a,c)=>a+c.qty,0);
+  const b=document.getElementById('cart-badge');
+  b.textContent=t; b.style.display=t>0?'flex':'none';
+}
+function renderCart(){
+  const el=document.getElementById('cart-content');
+  if(!cart.length){el.innerHTML=`<div class="cart-empty"><p>Your bag is empty.</p><button class="btn-royal" onclick="showPage('home')"><span>Shop the Collection</span></button></div>`;return;}
+  const sub=cart.reduce((a,c)=>a+c.naira*c.qty,0);
+  const dis=Math.round(sub*(discount/100));
+  const total=sub-dis+3500;
+  el.innerHTML=`
+    <table class="cart-table">
+      <thead><tr><th colspan="2">Product</th><th>Size</th><th>Qty</th><th style="text-align:right">Price</th></tr></thead>
+      <tbody>${cart.map((item,i)=>`
+        <tr class="cart-row">
+          <td><img src="${item.img}" class="cart-img"></td>
+          <td><div class="cart-info"><div class="cart-item-name">${item.name}</div><button class="cart-rm" onclick="rmItem(${i})">Remove</button></div></td>
+          <td><span style="font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)">${item.size}</span></td>
+          <td><div class="cart-qty"><button class="qty-btn" onclick="chQty(${i},-1)">−</button><span class="qty-n">${item.qty}</span><button class="qty-btn" onclick="chQty(${i},1)">+</button></div></td>
+          <td class="cart-price">${fmt(item.naira*item.qty)}</td>
+        </tr>`).join('')}</tbody>
+    </table>
+    <div style="display:flex;justify-content:flex-end">
+      <div class="cart-summary">
+        <div class="cs-row"><span class="cs-label">Subtotal</span><span class="cs-val">${fmt(sub)}</span></div>
+        ${discount>0?`<div class="cs-row"><span class="cs-label discount-line">Discount (${discount}%)</span><span class="cs-val discount-line">−${fmt(dis)}</span></div>`:''}
+        <div class="cs-row"><span class="cs-label">Delivery</span><span class="cs-val">${fmt(3500)}</span></div>
+        <div class="cs-row total"><span class="cs-label">Total</span><span class="cs-val">${fmt(total)}</span></div>
+        <div class="promo-row">
+          <input class="promo-input" id="promo-in" type="text" placeholder="Promo code" value="${promoUsed}">
+          <button class="promo-btn" onclick="applyPromo()">Apply</button>
+        </div>
+        <div class="promo-msg" id="promo-msg">${discount>0?'<span class="promo-ok">✓ Discount applied!</span>':''}</div>
+        <button class="cart-checkout-btn" onclick="showPage('checkout')"><span>Proceed to Checkout →</span></button>
+      </div>
+    </div>`;
+}
+function chQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);updateBadge();renderCart()}
+function rmItem(i){cart.splice(i,1);updateBadge();renderCart()}
+function applyPromo(){
+  const code=document.getElementById('promo-in').value.trim().toUpperCase();
+  const msg=document.getElementById('promo-msg');
+  if(PROMOS[code]){discount=PROMOS[code];promoUsed=code;msg.innerHTML=`<span class="promo-ok">✓ ${discount}% off applied!</span>`;renderCart();}
+  else{msg.innerHTML=`<span class="promo-err">✗ Invalid code</span>`;discount=0;promoUsed='';}
+}
+
+// Checkout
+function renderSidebar(){
+  const sub=cart.reduce((a,c)=>a+c.naira*c.qty,0);
+  const dis=Math.round(sub*(discount/100));
+  const total=sub-dis+3500;
+  document.getElementById('order-sidebar').innerHTML=`
+    <h3>Order Summary</h3>
+    ${cart.map(item=>`<div class="order-item"><img src="${item.img}"><div class="oi-info"><div class="oi-name">${item.name}</div><div class="oi-sub">Size: ${item.size} · Qty: ${item.qty}</div></div><div class="oi-price">${fmt(item.naira*item.qty)}</div></div>`).join('')}
+    <div style="margin-top:16px">
+      <div class="ot-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+      ${discount>0?`<div class="ot-row discount-line"><span>Discount (${discount}%)</span><span>−${fmt(dis)}</span></div>`:''}
+      <div class="ot-row"><span>Delivery</span><span>${fmt(3500)}</span></div>
+      <div class="ot-row grand"><span>Total</span><span>${fmt(total)}</span></div>
+    </div>`;
+}
+function placeOrder(){
+  const ff=['f-fname','f-lname','f-email','f-phone','f-street','f-city','f-state'];
+  let ok=true;
+  ff.forEach(id=>{const el=document.getElementById(id);if(!el.value.trim()){el.classList.add('err');ok=false;}else el.classList.remove('err');});
+  if(!ok){toast('Please fill all required fields');return;}
+  const fn=document.getElementById('f-fname').value;
+  const ln=document.getElementById('f-lname').value;
+  const em=document.getElementById('f-email').value;
+  const ph=document.getElementById('f-phone').value;
+  const st=document.getElementById('f-street').value;
+  const ci=document.getElementById('f-city').value;
+  const sta=document.getElementById('f-state').value;
+  const sub=cart.reduce((a,c)=>a+c.naira*c.qty,0);
+  const dis=Math.round(sub*(discount/100));
+  const total=sub-dis+3500;
+  const num='ZEV-'+Date.now().toString().slice(-6);
+  const msg=`👑 *NEW ZEEVANO ORDER*\n\nOrder: ${num}\nName: ${fn} ${ln}\nPhone: ${ph}\nEmail: ${em}\nAddress: ${st}, ${ci}, ${sta}\n\nItems:\n${cart.map(c=>`${c.name} (${c.size} x${c.qty}) — ${fmt(c.naira*c.qty)}`).join('\n')}\n${discount>0?`Discount: ${discount}%\n`:''}\nTotal: ${fmt(total)}\n\n_Sent from Zeevano Website_`;
+  document.getElementById('wa-link').href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+  document.getElementById('confirm-box').innerHTML=`
+    <h4>Order Details</h4>
+    <div class="cd"><span>Order Number</span><span>${num}</span></div>
+    <div class="cd"><span>Name</span><span>${fn} ${ln}</span></div>
+    <div class="cd"><span>Delivery</span><span>${st}, ${ci}, ${sta}</span></div>
+    ${cart.map(item=>`<div class="cd"><span>${item.name} (${item.size} × ${item.qty})</span><span>${fmt(item.naira*item.qty)}</span></div>`).join('')}
+    ${discount>0?`<div class="cd"><span>Discount</span><span class="discount-line">−${fmt(dis)}</span></div>`:''}
+    <div class="confirm-total"><span>Total</span><span>${fmt(total)}</span></div>`;
+  document.getElementById('confirm-msg').textContent=`We will contact you on ${ph} / ${em} within 24 hours to confirm payment and arrange delivery.`;
+  showPage('confirm');
+}
+function resetCart(){cart=[];discount=0;promoUsed='';updateBadge();}
+
+// Toast
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+
+// Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.addEventListener('mouseover',e=>{
+  if(e.target.closest('a,button,.col-card')){cur.style.width='5px';cur.style.height='5px';curR.style.width='54px';curR.style.height='54px'}
+  else{cur.style.width='10px';cur.style.height='10px';curR.style.width='38px';curR.style.height='38px'}
+});
+
+// Nav scroll
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>80));
+
+// Reveal on scroll
+function initReveal(){
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){
+    const delay=e.target.dataset.staggerIndex?parseInt(e.target.dataset.staggerIndex)*80:0;
+    setTimeout(()=>e.target.classList.add('visible'),delay);
+    obs.unobserve(e.target);
+  }})},{threshold:0.1});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>{el.classList.remove('visible');obs.observe(el)});
+  // Stagger items inside the same grid container
+  document.querySelectorAll('.col-grid,.look-grid').forEach(grid=>{
+    Array.from(grid.children).forEach((child,i)=>{ if(child.classList.contains('reveal')) child.dataset.staggerIndex=i; });
+  });
+}
+initReveal();
+
+// Urgency: stock counters (persist per session so it doesn't reset on refresh)
+const stockData={};
+function getStock(name){
+  if(!stockData[name]) stockData[name]=Math.floor(Math.random()*6)+3; // 3-8 left
+  return stockData[name];
+}
+function getViewers(){ return Math.floor(Math.random()*9)+4; } // 4-12 viewing
+
+// Exit-intent email capture
+let exitShown=sessionStorage.getItem('zeevano_exit_shown')==='1';
+document.addEventListener('mouseleave',(e)=>{
+  if(e.clientY<10 && !exitShown){
+    exitShown=true;
+    sessionStorage.setItem('zeevano_exit_shown','1');
+    document.getElementById('exitModal').classList.add('open');
+  }
+});
+function closeExitModal(){ document.getElementById('exitModal').classList.remove('open'); }
+function claimExitCode(){
+  const email=document.getElementById('exitEmail').value;
+  if(email && email.includes('@')){
+    showToast('Code WELCOME10 sent! Check your email.');
+    closeExitModal();
+  } else {
+    showToast('Please enter a valid email');
+  }
+}
+</script>
+<!-- Exit Intent Modal -->
+<div class="exit-modal" id="exitModal">
+  <div class="exit-box">
+    <button class="exit-close" onclick="closeExitModal()">✕</button>
+    <h3>Wait — Before You Go</h3>
+    <p>Join the court. Get 10% off your first order with code <strong style="color:var(--gold)">WELCOME10</strong></p>
+    <input type="email" id="exitEmail" placeholder="Your email address">
+    <button class="claim-btn" onclick="claimExitCode()">Claim My Discount</button>
+  </div>
+</div>
+</body>
+</html>
